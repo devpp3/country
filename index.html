@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Untitled Document</title>
+    <link rel="stylesheet" href="./bootstrap.css">
+    <script>
+        var stateObject = {
+            "India": {
+                "Delhi": {"East delhi": ["gandhi nagar", "Vivek vihar", "shamas pur"], "West delhi": ["bakkar wala", "Bapraula", "nangloi jat"]},
+                "Kerala": { "kollam": ["kottamkara", "mangad", "pallimon"], "malappuram": ["areekode", "cherukavu", "ernad"]},
+                "Goa": { "panji": ["alorna","mapusa", "cujira"], "margao": ["agonda", "angediva", "cola"]},
+                "Maharashtra": { "Kolhapur": ["shirol", "karvir", "gadinglaj"], "Sangli": ["valva", "miraj", "vita"] }
+            },
+
+            "Australia": {
+                "South Australia": {},
+                "Victoria": {}
+            },
+
+            "Canada": {
+                "Alberta": {},
+                "Columbia": {}
+            },
+        }
+        window.onload = function () {
+            //on load
+            var countySel = document.getElementById("countySel"),
+                stateSel = document.getElementById("stateSel"),
+                districtSel = document.getElementById("districtSel");
+            talSel = document.getElementById("talSel");
+            //put country into country dropdown
+            for (var country in stateObject) {
+                countySel.options[countySel.options.length] = new Option(country, country);
+            }
+
+            //when we select countroy
+            countySel.onchange = function () {
+                stateSel.length = 1; // remove all options bar first
+                districtSel.length = 1; // remove all options bar first
+                if (this.selectedIndex < 1) return; // done
+                //selecting state with selected value of country
+                for (var state in stateObject[this.value]) {
+                    stateSel.options[stateSel.options.length] = new Option(state, state);
+                }
+            }
+            countySel.onchange(); // reset in case page is reloaded
+
+            //when we select state
+            stateSel.onchange = function () {
+                districtSel.length = 1; // remove all options bar first
+                if (this.selectedIndex < 1) return; // done
+                //selecting dist whith selected country, value of state
+                for (let districts in stateObject[countySel.value][this.value]) {
+                    districtSel.options[districtSel.options.length] = new Option(districts, districts);
+                }
+            }
+
+            //when we select district
+            districtSel.onchange = function () {
+             
+                talSel.length = 1; // remove all options bar first
+                if (this.selectedIndex < 1) return; // done
+                //selecting tal whith selected country, slected state , val of dist
+
+                var tal = stateObject[countySel.value][stateSel.value][this.value];
+                for (let tals of tal) {
+                    talSel.options[talSel.options.length] = new Option(tals, tals);
+                }
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <div class="card p-4">
+                    <div class="card-header text-light">Cascading Information</div>
+                    <form name="myform" id="myForm">
+                        Select Country: <select name="state" id="countySel" class="form-control mb-2" size="1">
+                            <option value="" selected="selected">Select Country</option>
+                        </select>
+                       
+                        Select State: <select name="countrya" id="stateSel" class="form-control mb-2" size="1">
+                            <option value="" selected="selected">Please select Country first</option>
+                        </select>
+                        
+                        Select District: <select name="district" id="districtSel" class="form-control mb-2" size="1">
+                            <option value="" selected="selected">Please select State first</option>
+                        </select>
+
+                        Select Tal: <select name="tal" id="talSel" size="1" class="form-control mb-2">
+                            <option value="" selected="selected">Please select District first</option>
+                        </select>
+                        <input type="submit" class="btn btn-primary mb-2">
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+    </div>
+
+</body>
+
+</html>
